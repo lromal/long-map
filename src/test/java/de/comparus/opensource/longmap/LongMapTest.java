@@ -13,10 +13,12 @@ public class LongMapTest {
 
         LongMap<String> map = new LongMapImpl<>(1);
 
-        map.put(1, "test1");
-        map.put(33, "test2");
-        map.put(1, "test3");
-        map.put(44, "test4");
+        String oldValue;
+
+        oldValue = map.put(1, "test1");
+        oldValue = map.put(33, "test2");
+        oldValue = map.put(1, "test3");
+        oldValue = map.put(44, "test4");
 
 //        String value = map.get(1);
         boolean contains = map.containsKey(4);

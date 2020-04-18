@@ -25,25 +25,26 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         Entry entry = new Entry<>(key, value);
 
-        putEntry(entry);
-
-        return null;
+        return putEntry(entry);
     }
 
-    private void putEntry(Entry entry) {
+    private V putEntry(Entry entry) {
 
         LinkedList<Entry> bucket = getBucket(entry, true);
 
         int index = bucket.indexOf(entry);
 
         if(index >= 0) {
-            bucket.get(index).setValue(entry.getValue());
-            return;
+
+            return (V) bucket.get(index).setValue(entry.getValue());
+
         }
 
         bucket.add(entry);
 
         size++;
+
+        return null;
 
     }
 
