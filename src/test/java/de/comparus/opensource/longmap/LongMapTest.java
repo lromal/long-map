@@ -18,7 +18,8 @@ public class LongMapTest {
         map.put(1, "test3");
         map.put(44, "test4");
 
-        String value = map.get(1);
+//        String value = map.get(1);
+        boolean contains = map.containsKey(4);
 
         assertEquals("Test message", 2, 2);
     }

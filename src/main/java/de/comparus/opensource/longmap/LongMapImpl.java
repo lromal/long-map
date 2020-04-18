@@ -32,7 +32,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     private void putEntry(Entry entry) {
 
-        LinkedList<Entry> bucket = getBucket(entry);
+        LinkedList<Entry> bucket = getBucket(entry, true);
 
         int index = bucket.indexOf(entry);
 
@@ -47,7 +47,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     }
 
-    private LinkedList<Entry> getBucket(Entry entry) {
+    private LinkedList<Entry> getBucket(Entry entry, boolean createBucket) {
 
         int hash = entry.hashCode();
 
@@ -55,43 +55,52 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         if(list == null) {
             list = new LinkedList<>();
-            buckets[hash] = list;
+
+            if(createBucket) {
+                buckets[hash] = list;
+            }
         }
 
         return list;
     }
 
+    @Override
     public V get(long key) {
 
-        int hash = hashCode(key, capacity);
+        Entry<V> searchedEntry = new Entry(key, null);
 
-        LinkedList<Entry> list = buckets[hash];
+        LinkedList<Entry> list = getBucket(searchedEntry, false);
 
-        if(list == null) {
-            return null;
-        }
-
-        int index = list.indexOf(new Entry(key, null));
+        int index = list.indexOf(searchedEntry);
 
         if(index < 0) {
             return null;
         }
 
-        Entry<V> entry = list.get(index);
+        searchedEntry = list.get(index);
 
-        return entry.getValue();
+        return searchedEntry.getValue();
     }
 
     public V remove(long key) {
         return null;
     }
 
+    @Override
     public boolean isEmpty() {
         return size == 0;
     }
 
+    @Override
     public boolean containsKey(long key) {
-        return false;
+
+        Entry<V> searchedEntry = new Entry(key, null);
+
+        LinkedList<Entry> list = getBucket(searchedEntry, false);
+
+        int index = list.indexOf(searchedEntry);
+
+        return index >= 0;
     }
 
     public boolean containsValue(V value) {
@@ -106,6 +115,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         return null;
     }
 
+    @Override
     public long size() {
         return size;
     }
@@ -116,7 +126,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     }
 
-    public static int hashCode(long key, int capacity) {
+    private static int hashCode(long key, int capacity) {
         return Long.hashCode(key) % capacity;
     }
 
