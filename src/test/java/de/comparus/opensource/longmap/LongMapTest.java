@@ -1,19 +1,19 @@
 package de.comparus.opensource.longmap;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
 public class LongMapTest {
 
-    private static List<Long> keys;
+    private static long[] keys;
     private static List<String> values;
     LongMap<String> testData;
 
@@ -21,11 +21,11 @@ public class LongMapTest {
 
     @BeforeClass
     public static void init() {
-        keys = new ArrayList<>();
-        keys.add(1L);
-        keys.add(2L);
-        keys.add(3L);
-        keys.add(4L);
+        keys = new long[4];
+        keys[0] = 1;
+        keys[1] = 2;
+        keys[2] = 3;
+        keys[3] = 4;
 
         values = new ArrayList<>();
         values.add("test1");
@@ -39,8 +39,8 @@ public class LongMapTest {
 
         testData = new LongMapImpl<>(3);
 
-        for(int i = 0; i < keys.size(); i++) {
-            testData.put(keys.get(i), values.get(i));
+        for(int i = 0; i < keys.length; i++) {
+            testData.put(keys[i], values.get(i));
         }
     }
 
@@ -112,9 +112,27 @@ public class LongMapTest {
 
     @Test
     public void testClear() {
+
         testData.clear();
 
         assertEquals("Test message", 0, testData.size());
+
+    }
+
+    @Test
+    public void testKeys() {
+
+        long[] testDataKeys = testData.keys();
+
+        Arrays.sort(testDataKeys);
+
+        assertArrayEquals("Test message", keys, testDataKeys);
+
+        LongMap<String> newMap = new LongMapImpl<>(1);
+
+        testDataKeys = newMap.keys();
+
+        assertEquals("Test message", 0, testDataKeys.length);
 
     }
 

@@ -1,7 +1,8 @@
 package de.comparus.opensource.longmap;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class LongMapImpl<V> implements LongMap<V> {
 
@@ -92,8 +93,9 @@ public class LongMapImpl<V> implements LongMap<V> {
         return false;
     }
 
+    @Override
     public long[] keys() {
-        return null;
+        return convertToStream().mapToLong((a) -> a.key).toArray();
     }
 
     public V[] values() {
@@ -105,6 +107,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         return size;
     }
 
+    @Override
     public void clear() {
 
         for(int i = 0; i < buckets.length; i++) {
@@ -119,6 +122,10 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         size = 0;
 
+    }
+
+    private Stream<Entry> convertToStream() {
+        return Arrays.stream(buckets).filter(Objects::nonNull).flatMap(Collection::stream);
     }
 
     private V putEntry(Entry entry) {
