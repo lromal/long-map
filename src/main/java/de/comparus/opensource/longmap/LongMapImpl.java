@@ -28,42 +28,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         return putEntry(entry);
     }
 
-    private V putEntry(Entry entry) {
 
-        LinkedList<Entry> bucket = getBucket(entry, true);
-
-        int index = bucket.indexOf(entry);
-
-        if(index >= 0) {
-
-            return (V) bucket.get(index).setValue(entry.getValue());
-
-        }
-
-        bucket.add(entry);
-
-        size++;
-
-        return null;
-
-    }
-
-    private LinkedList<Entry> getBucket(Entry entry, boolean createBucket) {
-
-        int hash = entry.hashCode();
-
-        LinkedList<Entry> list = buckets[hash];
-
-        if(list == null) {
-            list = new LinkedList<>();
-
-            if(createBucket) {
-                buckets[hash] = list;
-            }
-        }
-
-        return list;
-    }
 
     @Override
     public V get(long key) {
@@ -125,6 +90,43 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         size = 0;
 
+    }
+
+    private V putEntry(Entry entry) {
+
+        LinkedList<Entry> bucket = getBucket(entry, true);
+
+        int index = bucket.indexOf(entry);
+
+        if(index >= 0) {
+
+            return (V) bucket.get(index).setValue(entry.getValue());
+
+        }
+
+        bucket.add(entry);
+
+        size++;
+
+        return null;
+
+    }
+
+    private LinkedList<Entry> getBucket(Entry entry, boolean createBucket) {
+
+        int hash = entry.hashCode();
+
+        LinkedList<Entry> list = buckets[hash];
+
+        if(list == null) {
+            list = new LinkedList<>();
+
+            if(createBucket) {
+                buckets[hash] = list;
+            }
+        }
+
+        return list;
     }
 
     private static int hashCode(long key, int capacity) {
