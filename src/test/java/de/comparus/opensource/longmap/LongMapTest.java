@@ -37,7 +37,7 @@ public class LongMapTest {
     @Before
     public void createTestData() {
 
-        testData = new LongMapImpl<>(4);
+        testData = new LongMapImpl<>(3);
 
         for(int i = 0; i < keys.size(); i++) {
             testData.put(keys.get(i), values.get(i));
@@ -107,6 +107,14 @@ public class LongMapTest {
         assertEquals("Test message", 3, testData.size());
 
         assertEquals("Test message", null, value);
+
+    }
+
+    @Test
+    public void testClear() {
+        testData.clear();
+
+        assertEquals("Test message", 0, testData.size());
 
     }
 

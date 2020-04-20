@@ -1,6 +1,7 @@
 package de.comparus.opensource.longmap;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class LongMapImpl<V> implements LongMap<V> {
 
@@ -48,6 +49,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         return searchedEntry.getValue();
     }
 
+    @Override
     public V remove(long key) {
 
         Entry<V> searchedEntry = new Entry(key, null);
@@ -104,6 +106,16 @@ public class LongMapImpl<V> implements LongMap<V> {
     }
 
     public void clear() {
+
+        for(int i = 0; i < buckets.length; i++) {
+
+            if(buckets[i] == null) {
+                continue;
+            }
+
+            buckets[i].clear();
+            buckets[i] = null;
+        }
 
         size = 0;
 
