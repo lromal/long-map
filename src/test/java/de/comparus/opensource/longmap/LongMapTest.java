@@ -37,7 +37,7 @@ public class LongMapTest {
     @Before
     public void createTestData() {
 
-        testData = new LongMapImpl<>(1);
+        testData = new LongMapImpl<>(4);
 
         for(int i = 0; i < keys.size(); i++) {
             testData.put(keys.get(i), values.get(i));
@@ -79,6 +79,17 @@ public class LongMapTest {
         assertEquals("Test message", true, testData.containsKey(4L));
 
         assertEquals("Test message", false, testData.containsKey(5L));
+
+    }
+
+    @Test
+    public void testIsEmpty() {
+
+        assertEquals("Test message", false, testData.isEmpty());
+
+        LongMap emptyMap = new LongMapImpl(1);
+
+        assertEquals("Test message", true, emptyMap.isEmpty());
 
     }
 
