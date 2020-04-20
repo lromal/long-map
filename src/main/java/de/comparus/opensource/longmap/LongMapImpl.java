@@ -49,7 +49,24 @@ public class LongMapImpl<V> implements LongMap<V> {
     }
 
     public V remove(long key) {
-        return null;
+
+        Entry<V> searchedEntry = new Entry(key, null);
+
+        LinkedList<Entry> list = getBucket(searchedEntry, false);
+
+        int index = list.indexOf(searchedEntry);
+
+        if(index < 0) {
+            return null;
+        }
+
+        searchedEntry = list.get(index);
+
+        list.remove(index);
+
+        size--;
+
+        return searchedEntry.getValue();
     }
 
     @Override

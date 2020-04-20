@@ -93,4 +93,21 @@ public class LongMapTest {
 
     }
 
+    @Test
+    public void testRemove() {
+
+        String value = testData.remove(1L);
+
+        assertEquals("Test message", 3, testData.size());
+
+        assertEquals("Test message", "test1", value);
+
+        value = testData.remove(1L);
+
+        assertEquals("Test message", 3, testData.size());
+
+        assertEquals("Test message", null, value);
+
+    }
+
 }
