@@ -151,22 +151,12 @@ public class LongMapImpl<V> implements LongMap<V> {
                 return equals((Entry) object);
             }
 
-            if (object instanceof Long) {
-                return equals((Long) object);
-            }
-
             return false;
         }
 
         private boolean equals(Entry entry) {
 
             return entry.key == this.key;
-
-        }
-
-        private boolean equals(Long entry) {
-
-            return entry == this.key;
 
         }
 
