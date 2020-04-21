@@ -53,13 +53,19 @@ public class LongMapTest {
 
         assertEquals("Test message", TEST_DATA_LENGTH, testData.size());
 
-        testData.put(5L, "test5");
+        String newValue = "test5";
+
+        String oldValue = testData.put(5L, newValue);
 
         assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
 
-        testData.put(5L, "test5");
+        assertNull("Test message", oldValue);
+
+        oldValue = testData.put(5L, "test55");
 
         assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
+
+        assertEquals("Test message", newValue, oldValue);
 
     }
 
