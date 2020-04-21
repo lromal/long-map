@@ -27,6 +27,17 @@ public class LongMapImpl<V> implements LongMap<V> {
         buckets = new LinkedList[this.capacity];
     }
 
+    public LongMapImpl(int capacity, double density) {
+
+        this.capacity = capacity;
+
+        this.density = density;
+
+        calculateMaxSize();
+
+        buckets = new LinkedList[this.capacity];
+    }
+
     public LongMapImpl() {
 
         capacity = DEFAULT_CAPACITY;
