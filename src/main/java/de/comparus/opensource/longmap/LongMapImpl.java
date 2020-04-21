@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class LongMapImpl<V> implements LongMap<V> {
 
     private static final int DEFAULT_CAPACITY = 16;
-    private static final double DEFAULT_DENSITY = 0.75; // 16
+    private static final double DEFAULT_DENSITY = 0.75;
 
     private LinkedList<Entry<V>>[] buckets;
     private int size = 0;
@@ -94,7 +94,7 @@ public class LongMapImpl<V> implements LongMap<V> {
             return null;
         }
 
-        return (V) list.get(index).getValue();
+        return list.get(index).getValue();
     }
 
     @Override
@@ -205,7 +205,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         if(index >= 0) {
 
-            return (V) bucket.get(index).setValue(entry.getValue());
+            return bucket.get(index).setValue(entry.getValue());
 
         }
 
@@ -243,7 +243,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         private long key;
         private T value;
 
-        public Entry(long key, T value) {
+        Entry(long key, T value) {
             this.key = key;
             this.value = value;
         }
@@ -254,24 +254,19 @@ public class LongMapImpl<V> implements LongMap<V> {
                 return true;
             }
 
-            if (object instanceof Entry) {
-                return equals((Entry) object);
-            }
+            return object instanceof Entry && equalsEntry(object);
 
-            return false;
         }
 
-        private boolean equals(Entry entry) {
+        private boolean equalsEntry(Object object) {
+
+            Entry entry = (Entry) object;
 
             return entry.key == this.key;
 
         }
 
-        public long getKey() {
-            return key;
-        }
-
-        public T getValue() {
+        T getValue() {
             return value;
         }
 
@@ -279,7 +274,7 @@ public class LongMapImpl<V> implements LongMap<V> {
             return LongMapImpl.hashCode(key, capacity);
         }
 
-        public T setValue(T value) {
+        T setValue(T value) {
 
             T oldValue = this.value;
 

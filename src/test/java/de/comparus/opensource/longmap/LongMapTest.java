@@ -14,8 +14,8 @@ public class LongMapTest {
 
     private static long[] keys;
     private static String[] values;
-    LongMap<String> testData;
-    LongMap<String> testEmptyData;
+    private LongMap<String> testData;
+    private LongMap<String> testEmptyData;
     private final static int TEST_DATA_LENGTH = 4;
 
 
