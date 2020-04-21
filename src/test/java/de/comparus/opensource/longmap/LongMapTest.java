@@ -44,7 +44,7 @@ public class LongMapTest {
             testData.put(keys[i], values[i]);
         }
 
-        testEmptyData = new LongMapImpl<>(1);
+        testEmptyData = new LongMapImpl<>();
     }
 
 
@@ -53,15 +53,19 @@ public class LongMapTest {
 
         assertEquals("Test message", TEST_DATA_LENGTH, testData.size());
 
-        String newValue = "test5";
 
-        String oldValue = testData.put(5L, newValue);
+        String newValue = "test5";
+        long newKey = 5;
+
+
+        String oldValue = testData.put(newKey, newValue);
 
         assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
 
         assertNull("Test message", oldValue);
 
-        oldValue = testData.put(5L, "test55");
+
+        oldValue = testData.put(newKey, "test55");
 
         assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
 

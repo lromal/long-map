@@ -12,6 +12,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     private LinkedList<Entry>[] buckets;
     private int size = 0;
+    private int maxSize;
     private int capacity;
     private double density;
 
@@ -21,6 +22,19 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         density = DEFAULT_DENSITY;
 
+        calculateMaxSize();
+
+        buckets = new LinkedList[this.capacity];
+    }
+
+    public LongMapImpl() {
+
+        capacity = DEFAULT_CAPACITY;
+
+        density = DEFAULT_DENSITY;
+
+        calculateMaxSize();
+
         buckets = new LinkedList[this.capacity];
     }
 
@@ -28,9 +42,32 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         Entry entry = new Entry<>(key, value);
 
+        resize();
+
         return putEntry(entry);
     }
 
+    private void resize() {
+
+        if(size < maxSize) {
+            return;
+        }
+
+        capacity *= 2;
+
+        calculateMaxSize();
+
+        List<Entry> list = convertToStream().collect(Collectors.toList());
+
+        clear();
+
+        buckets = new LinkedList[this.capacity];
+
+        for (Entry entry : list) {
+            put(entry.key, (V) entry.value);
+        }
+
+    }
 
 
     @Override
@@ -141,6 +178,12 @@ public class LongMapImpl<V> implements LongMap<V> {
         }
 
         size = 0;
+
+    }
+
+    private void calculateMaxSize() {
+
+        maxSize = Math.toIntExact(Math.round(capacity * density));
 
     }
 
