@@ -91,7 +91,10 @@ public class LongMapImpl<V> implements LongMap<V> {
     }
 
     public boolean containsValue(V value) {
-        return false;
+
+        Optional<Entry> searchedEntry = convertToStream().parallel().filter(a -> a.value == value).findAny();
+
+        return searchedEntry.isPresent();
     }
 
     @Override
