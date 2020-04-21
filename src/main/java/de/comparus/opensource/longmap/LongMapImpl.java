@@ -148,26 +148,23 @@ public class LongMapImpl<V> implements LongMap<V> {
     @Override
     public long[] keys() {
 
-        long[] keys = convertToStream().mapToLong((a) -> a.key).toArray();
-
-        if(keys.length > 0) {
-            return keys;
+        if(size == 0) {
+            return null;
         }
 
-        return null;
+        return convertToStream().mapToLong((a) -> a.key).toArray();
     }
 
     @Override
     public V[] values() {
 
-        List<Object> objects = convertToStream().map((a) -> a.value).collect(Collectors.toList());
-
-        if(objects.size() > 0) {
-
-            return objects.toArray((V[]) Array.newInstance(objects.get(0).getClass(), objects.size()));
+        if(size == 0) {
+            return null;
         }
 
-        return null;
+        List<Object> objects = convertToStream().map((a) -> a.value).collect(Collectors.toList());
+
+        return objects.toArray((V[]) Array.newInstance(objects.get(0).getClass(), objects.size()));
     }
 
     @Override
