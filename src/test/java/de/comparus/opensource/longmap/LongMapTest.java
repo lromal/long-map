@@ -43,6 +43,13 @@ public class LongMapTest {
         testEmptyData = new LongMapImpl<>();
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testCreateWithIllegalArguments() {
+
+
+
+    }
+
 
     @Test
     public void testPut() {
