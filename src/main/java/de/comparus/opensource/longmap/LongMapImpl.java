@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 public class LongMapImpl<V> implements LongMap<V> {
 
     private static final int DEFAULT_CAPACITY = 16;
-    private static final double DEFAULT_DENSITY = 0.75;
+    private static final float DEFAULT_DENSITY = 0.75f;
 
     private LinkedList<Entry<V>>[] buckets;
     private int size = 0;
@@ -16,18 +16,20 @@ public class LongMapImpl<V> implements LongMap<V> {
     private int capacity;
     private double density;
 
-    public LongMapImpl(int capacity) {
 
-        this.capacity = capacity;
+    /**
+     * @param capacity the initial size of a hash table array. It should be >= 0.
+     * @param density the load factor of a hash table. It should be >= 0.
+     */
+    public LongMapImpl(int capacity, float density) {
 
-        density = DEFAULT_DENSITY;
+        if(capacity <= 0) {
+            throw new IllegalArgumentException("Illegal capacity: " + capacity);
+        }
 
-        calculateMaxSize();
-
-        buckets = new LinkedList[this.capacity];
-    }
-
-    public LongMapImpl(int capacity, double density) {
+        if(density <= 0) {
+            throw new IllegalArgumentException("Illegal density: " + density);
+        }
 
         this.capacity = capacity;
 
@@ -38,15 +40,17 @@ public class LongMapImpl<V> implements LongMap<V> {
         buckets = new LinkedList[this.capacity];
     }
 
+    /**
+     * @param capacity the initial size of a hash table array. It should be >= 0.
+     */
+    public LongMapImpl(int capacity) {
+
+        this(capacity, DEFAULT_DENSITY);
+    }
+
     public LongMapImpl() {
 
-        capacity = DEFAULT_CAPACITY;
-
-        density = DEFAULT_DENSITY;
-
-        calculateMaxSize();
-
-        buckets = new LinkedList[this.capacity];
+        this(DEFAULT_CAPACITY, DEFAULT_DENSITY);
     }
 
     public V put(long key, V value) {
