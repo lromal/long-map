@@ -8,30 +8,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class LongMapTest {
 
     private static long[] keys;
-    private static List<String> values;
+    private static String[] values;
     LongMap<String> testData;
+    private final static int TEST_DATA_LENGTH = 4;
 
 
 
     @BeforeClass
     public static void init() {
-        keys = new long[4];
+        keys = new long[TEST_DATA_LENGTH];
         keys[0] = 1;
         keys[1] = 2;
         keys[2] = 3;
         keys[3] = 4;
 
-        values = new ArrayList<>();
-        values.add("test1");
-        values.add("test2");
-        values.add("test3");
-        values.add("test4");
+        values = new String[TEST_DATA_LENGTH];
+        values[0] = "test1";
+        values[1] = "test2";
+        values[2] = "test3";
+        values[3] = "test4";
     }
 
     @Before
@@ -40,7 +40,7 @@ public class LongMapTest {
         testData = new LongMapImpl<>(3);
 
         for(int i = 0; i < keys.length; i++) {
-            testData.put(keys[i], values.get(i));
+            testData.put(keys[i], values[i]);
         }
     }
 
@@ -48,15 +48,15 @@ public class LongMapTest {
     @Test
     public void testPut() {
 
-        assertEquals("Test message", 4, testData.size());
+        assertEquals("Test message", TEST_DATA_LENGTH, testData.size());
 
         testData.put(5L, "test5");
 
-        assertEquals("Test message", 5, testData.size());
+        assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
 
         testData.put(5L, "test5");
 
-        assertEquals("Test message", 5, testData.size());
+        assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
 
     }
 
@@ -98,13 +98,13 @@ public class LongMapTest {
 
         String value = testData.remove(1L);
 
-        assertEquals("Test message", 3, testData.size());
+        assertEquals("Test message", TEST_DATA_LENGTH - 1, testData.size());
 
         assertEquals("Test message", "test1", value);
 
         value = testData.remove(1L);
 
-        assertEquals("Test message", 3, testData.size());
+        assertEquals("Test message", TEST_DATA_LENGTH - 1, testData.size());
 
         assertEquals("Test message", null, value);
 
@@ -132,7 +132,24 @@ public class LongMapTest {
 
         testDataKeys = newMap.keys();
 
-        assertEquals("Test message", 0, testDataKeys.length);
+        assertNull("Test message", testDataKeys);
+
+    }
+
+    @Test
+    public void testValues() {
+
+        String[] testDataValues = testData.values();
+
+        Arrays.sort(testDataValues);
+
+        assertArrayEquals("Test message", values, testDataValues);
+
+        LongMap<String> newMap = new LongMapImpl<>(1);
+
+        testDataValues = newMap.values();
+
+        assertNull("Test message", testDataValues);
 
     }
 
