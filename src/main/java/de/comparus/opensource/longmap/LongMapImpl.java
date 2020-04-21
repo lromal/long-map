@@ -10,7 +10,7 @@ public class LongMapImpl<V> implements LongMap<V> {
     private static final int DEFAULT_CAPACITY = 16;
     private static final double DEFAULT_DENSITY = 0.75; // 16
 
-    private LinkedList<Entry>[] buckets;
+    private LinkedList<Entry<V>>[] buckets;
     private int size = 0;
     private int maxSize;
     private int capacity;
@@ -51,7 +51,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     public V put(long key, V value) {
 
-        Entry entry = new Entry<>(key, value);
+        Entry<V> entry = new Entry<>(key, value);
 
         resize();
 
@@ -68,14 +68,14 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         calculateMaxSize();
 
-        List<Entry> list = convertToStream().collect(Collectors.toList());
+        List<Entry<V>> list = convertToStream().collect(Collectors.toList());
 
         clear();
 
         buckets = new LinkedList[this.capacity];
 
-        for (Entry entry : list) {
-            put(entry.key, (V) entry.value);
+        for (Entry<V> entry : list) {
+            put(entry.key, entry.getValue());
         }
 
     }
@@ -84,9 +84,9 @@ public class LongMapImpl<V> implements LongMap<V> {
     @Override
     public V get(long key) {
 
-        Entry<V> searchedEntry = new Entry(key, null);
+        Entry<V> searchedEntry = new Entry<>(key, null);
 
-        LinkedList<Entry> list = getBucket(searchedEntry, false);
+        LinkedList<Entry<V>> list = getBucket(searchedEntry, false);
 
         int index = list.indexOf(searchedEntry);
 
@@ -94,17 +94,15 @@ public class LongMapImpl<V> implements LongMap<V> {
             return null;
         }
 
-        searchedEntry = list.get(index);
-
-        return searchedEntry.getValue();
+        return (V) list.get(index).getValue();
     }
 
     @Override
     public V remove(long key) {
 
-        Entry<V> searchedEntry = new Entry(key, null);
+        Entry<V> searchedEntry = new Entry<>(key, null);
 
-        LinkedList<Entry> list = getBucket(searchedEntry, false);
+        LinkedList<Entry<V>> list = getBucket(searchedEntry, false);
 
         int index = list.indexOf(searchedEntry);
 
@@ -129,9 +127,9 @@ public class LongMapImpl<V> implements LongMap<V> {
     @Override
     public boolean containsKey(long key) {
 
-        Entry<V> searchedEntry = new Entry(key, null);
+        Entry<V> searchedEntry = new Entry<>(key, null);
 
-        LinkedList<Entry> list = getBucket(searchedEntry, false);
+        LinkedList<Entry<V>> list = getBucket(searchedEntry, false);
 
         int index = list.indexOf(searchedEntry);
 
@@ -140,7 +138,7 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     public boolean containsValue(V value) {
 
-        Optional<Entry> searchedEntry = convertToStream().parallel().filter(a -> a.value == value).findAny();
+        Optional<Entry<V>> searchedEntry = convertToStream().parallel().filter(a -> a.value == value).findAny();
 
         return searchedEntry.isPresent();
     }
@@ -195,13 +193,13 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     }
 
-    private Stream<Entry> convertToStream() {
+    private Stream<Entry<V>> convertToStream() {
         return Arrays.stream(buckets).filter(Objects::nonNull).flatMap(Collection::stream);
     }
 
-    private V putEntry(Entry entry) {
+    private V putEntry(Entry<V> entry) {
 
-        LinkedList<Entry> bucket = getBucket(entry, true);
+        LinkedList<Entry<V>> bucket = getBucket(entry, true);
 
         int index = bucket.indexOf(entry);
 
@@ -219,11 +217,11 @@ public class LongMapImpl<V> implements LongMap<V> {
 
     }
 
-    private LinkedList<Entry> getBucket(Entry entry, boolean createBucket) {
+    private LinkedList<Entry<V>> getBucket(Entry entry, boolean createBucket) {
 
         int hash = entry.hashCode();
 
-        LinkedList<Entry> list = buckets[hash];
+        LinkedList<Entry<V>> list = buckets[hash];
 
         if(list == null) {
             list = new LinkedList<>();
@@ -240,12 +238,12 @@ public class LongMapImpl<V> implements LongMap<V> {
         return Long.hashCode(key) % capacity;
     }
 
-    class Entry<V> {
+    class Entry<T> {
 
         private long key;
-        private V value;
+        private T value;
 
-        public Entry(long key, V value) {
+        public Entry(long key, T value) {
             this.key = key;
             this.value = value;
         }
@@ -273,7 +271,7 @@ public class LongMapImpl<V> implements LongMap<V> {
             return key;
         }
 
-        public V getValue() {
+        public T getValue() {
             return value;
         }
 
@@ -281,9 +279,9 @@ public class LongMapImpl<V> implements LongMap<V> {
             return LongMapImpl.hashCode(key, capacity);
         }
 
-        public V setValue(V value) {
+        public T setValue(T value) {
 
-            V oldValue = this.value;
+            T oldValue = this.value;
 
             this.value = value;
 
