@@ -62,28 +62,6 @@ public class LongMapImpl<V> implements LongMap<V> {
         return putEntry(entry);
     }
 
-    private void resize() {
-
-        if(size < maxSize) {
-            return;
-        }
-
-        capacity *= 2;
-
-        calculateMaxSize();
-
-        List<Entry<V>> list = convertToStream().collect(Collectors.toList());
-
-        clear();
-
-        buckets = new LinkedList[this.capacity];
-
-        for (Entry<V> entry : list) {
-            put(entry.key, entry.getValue());
-        }
-
-    }
-
 
     @Override
     public V get(long key) {
@@ -188,6 +166,29 @@ public class LongMapImpl<V> implements LongMap<V> {
         }
 
         size = 0;
+
+    }
+
+
+    private void resize() {
+
+        if(size < maxSize) {
+            return;
+        }
+
+        capacity *= 2;
+
+        calculateMaxSize();
+
+        List<Entry<V>> list = convertToStream().collect(Collectors.toList());
+
+        clear();
+
+        buckets = new LinkedList[this.capacity];
+
+        for (Entry<V> entry : list) {
+            put(entry.key, entry.getValue());
+        }
 
     }
 
