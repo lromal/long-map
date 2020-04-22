@@ -260,6 +260,11 @@ public class LongMapImpl<V> implements LongMap<V> {
 
         }
 
+        public int hashCode() {
+            return Long.hashCode(key) % capacity;
+        }
+
+
         private boolean equalsEntry(Object object) {
 
             Entry entry = (Entry) object;
@@ -272,9 +277,6 @@ public class LongMapImpl<V> implements LongMap<V> {
             return value;
         }
 
-        public int hashCode() {
-            return Long.hashCode(key) % capacity;
-        }
 
         T setValue(T value) {
 
