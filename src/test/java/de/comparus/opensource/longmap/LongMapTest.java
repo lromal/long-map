@@ -66,7 +66,7 @@ public class LongMapTest {
     }
 
     @Test
-    public void put_AddedNewEntryWithNotExistingKey_SizeIsSameAndOldValueIsNotNull() {
+    public void put_AddedNewEntryWithExistingKey_SizeIsSameAndOldValueIsNotNull() {
 
         String oldValue = testData.put(4, "test44");
 
