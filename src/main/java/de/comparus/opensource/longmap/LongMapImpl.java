@@ -238,9 +238,6 @@ public class LongMapImpl<V> implements LongMap<V> {
         return list;
     }
 
-    private static int hashCode(long key, int capacity) {
-        return Long.hashCode(key) % capacity;
-    }
 
     class Entry<T> {
 
@@ -275,7 +272,7 @@ public class LongMapImpl<V> implements LongMap<V> {
         }
 
         public int hashCode() {
-            return LongMapImpl.hashCode(key, capacity);
+            return Long.hashCode(key) % capacity;
         }
 
         T setValue(T value) {
