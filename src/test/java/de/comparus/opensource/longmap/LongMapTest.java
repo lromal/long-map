@@ -44,133 +44,184 @@ public class LongMapTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testCreateWithIllegalArguments() {
+    public void constructor_IllegalCapacity_ExceptionThrown() {
 
+        testData = new LongMapImpl<>(-10);
 
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void constructor_IllegalDensity_ExceptionThrown() {
+
+        testData = new LongMapImpl<>(16, -10);
 
     }
 
 
     @Test
-    public void testPut() {
+    public void size_InitialTestData_TestDataLength() {
 
-        assertEquals("Test message", TEST_DATA_LENGTH, testData.size());
-
-
-        String newValue = "test5";
-        long newKey = 5;
-
-
-        String oldValue = testData.put(newKey, newValue);
-
-        assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
-
-        assertNull("Test message", oldValue);
-
-
-        oldValue = testData.put(newKey, "test55");
-
-        assertEquals("Test message", TEST_DATA_LENGTH + 1, testData.size());
-
-        assertEquals("Test message", newValue, oldValue);
+        assertEquals("Test data has the wrong size", TEST_DATA_LENGTH, testData.size());
 
     }
 
     @Test
-    public void testGet() {
+    public void put_AddedNewEntryWithNotExistingKey_SizeIsSameAndOldValueIsNotNull() {
+
+        String oldValue = testData.put(4, "test44");
+
+        assertEquals("Test data has the wrong size", TEST_DATA_LENGTH, testData.size());
+
+        assertEquals("Old value is wrong", "test4", oldValue);
+
+    }
+
+    @Test
+    public void put_AddedNewEntryWithNotExistingKey_SizeIncreasedAndOldValueIsNull() {
+
+        String oldValue = testData.put(5, "test5");
+
+        assertEquals("Test data has the wrong size", TEST_DATA_LENGTH + 1, testData.size());
+
+        assertNull("Old value is wrong", oldValue);
+
+    }
+
+    @Test
+    public void get_EntryExists_test4() {
 
         String value = testData.get(4L);
 
-        assertEquals("Test message", "test4", value);
-
-        value = testData.get(5L);
-
-        assertEquals("Test message", null, value);
+        assertEquals("Founded value is wrong", "test4", value);
 
     }
 
     @Test
-    public void testContainsKey() {
+    public void get_EntryNotExists_Null() {
 
-        assertEquals("Test message", true, testData.containsKey(4L));
+        String value = testData.get(5L);
 
-        assertEquals("Test message", false, testData.containsKey(5L));
-
-    }
-
-    @Test
-    public void testIsEmpty() {
-
-        assertEquals("Test message", false, testData.isEmpty());
-
-        assertEquals("Test message", true, testEmptyData.isEmpty());
+        assertNull("Some value was found by the wrong key", value);
 
     }
 
     @Test
-    public void testRemove() {
+    public void containsKey_EntryExists_True() {
+
+        assertEquals("Key was not found", true, testData.containsKey(4L));
+
+    }
+
+    @Test
+    public void containsKey_EntryNotExists_False() {
+
+        assertEquals("Some value was found by the wrong key", false, testData.containsKey(5L));
+
+    }
+
+    @Test
+    public void isEmpty_InitialTestData_False() {
+
+        assertEquals("Test data is empty", false, testData.isEmpty());
+
+    }
+
+    @Test
+    public void isEmpty_InitialEmptyTestData_True() {
+
+        assertEquals("Empty data contains some values", true, testEmptyData.isEmpty());
+
+    }
+
+    @Test
+    public void remove_OneEntryRemoved_TestDataSizeDecreasedAndOldValueIsNotNull() {
 
         String value = testData.remove(1L);
 
-        assertEquals("Test message", TEST_DATA_LENGTH - 1, testData.size());
+        assertEquals("Test data has the wrong size", TEST_DATA_LENGTH - 1, testData.size());
 
-        assertEquals("Test message", "test1", value);
-
-        value = testData.remove(1L);
-
-        assertEquals("Test message", TEST_DATA_LENGTH - 1, testData.size());
-
-        assertEquals("Test message", null, value);
+        assertEquals("Old value is wrong", "test1", value);
 
     }
 
     @Test
-    public void testClear() {
+    public void remove_KeyNotExists_TestDataSizeNotDecreasedAndOldValueIsNull() {
+
+        String value = testData.remove(5L);
+
+        assertEquals("Test data has the wrong size", TEST_DATA_LENGTH, testData.size());
+
+        assertNull("Old value is not null", value);
+
+    }
+
+    @Test
+    public void clear_EmptyMap_SizeIs0() {
 
         testData.clear();
 
-        assertEquals("Test message", 0, testData.size());
+        assertEquals("Test data is not empty", 0, testData.size());
 
     }
 
     @Test
-    public void testContainsValue() {
+    public void containsValue_ValueExists_True() {
 
-        assertEquals("Test message", true, testData.containsValue("test1"));
-
-        assertEquals("Test message", false, testData.containsValue("test5"));
-
-        assertEquals("Test message", false, testEmptyData.containsValue("test1"));
+        assertEquals("Existed value was not found", true, testData.containsValue("test1"));
 
     }
 
     @Test
-    public void testKeys() {
+    public void containsValue_ValueNotExists_False() {
+
+        assertEquals("Some entry was found by the wrong value", false, testData.containsValue("test5"));
+
+    }
+
+    @Test
+    public void containsValue_SearchingInEmptyMap_False() {
+
+        assertEquals("Some entry was found in the empty map", false, testEmptyData.containsValue("test1"));
+
+    }
+
+    @Test
+    public void keys_InitialTestData_TestDataKeys() {
 
         long[] testDataKeys = testData.keys();
 
         Arrays.sort(testDataKeys);
 
-        assertArrayEquals("Test message", keys, testDataKeys);
-
-        testDataKeys = testEmptyData.keys();
-
-        assertNull("Test message", testDataKeys);
+        assertArrayEquals("Some keys are missing", keys, testDataKeys);
 
     }
 
     @Test
-    public void testValues() {
+    public void keys_InitialTestEmptyData_Null() {
+
+        long[] testDataKeys = testEmptyData.keys();
+
+        assertNull("Some keys were found in the empty map", testDataKeys);
+
+    }
+
+    @Test
+    public void values_InitialTestData_TestDataValues() {
 
         String[] testDataValues = testData.values();
 
         Arrays.sort(testDataValues);
 
-        assertArrayEquals("Test message", values, testDataValues);
+        assertArrayEquals("Some values are missing", values, testDataValues);
 
-        testDataValues = testEmptyData.values();
+    }
 
-        assertNull("Test message", testDataValues);
+    @Test
+    public void values_InitialTestEmptyData_Null() {
+
+        String[] testDataValues = testEmptyData.values();
+
+        assertNull("Some values were found in the empty map", testDataValues);
 
     }
 
