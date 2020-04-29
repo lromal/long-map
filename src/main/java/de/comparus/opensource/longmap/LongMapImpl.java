@@ -14,12 +14,12 @@ public class LongMapImpl<V> implements LongMap<V> {
     private int size = 0;
     private int maxSize;
     private int capacity;
-    private double density;
+    private float density;
 
 
     /**
-     * @param capacity the initial size of a hash table array. It should be >= 0.
-     * @param density the load factor of a hash table. It should be >= 0.
+     * @param capacity the initial size of a hash table array. It should be > 0.
+     * @param density the load factor of a hash table. It should be > 0.
      */
     public LongMapImpl(int capacity, float density) {
 
@@ -41,7 +41,7 @@ public class LongMapImpl<V> implements LongMap<V> {
     }
 
     /**
-     * @param capacity the initial size of a hash table array. It should be >= 0.
+     * @param capacity the initial size of a hash table array. It should be > 0.
      */
     public LongMapImpl(int capacity) {
 
